@@ -21,6 +21,12 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.List;
 
+/**
+ * Created by marco on 14/11/2015.
+ */
+
+
+
 public class InternetAdapter {
     private Context ctx;
     private String url="";
