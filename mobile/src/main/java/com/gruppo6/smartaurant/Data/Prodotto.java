@@ -9,5 +9,14 @@ public class Prodotto {
     public String menu_id;
     public String nome_prodotto;
     public String descr;
-    public float prezzo;
+    public double prezzo;
+
+    public Prodotto(String _id, String _rist_id, String _menu_id, String _nome_prodotto, String _descr, double _prezzo){
+        id=_id;
+        rist_id=_rist_id;
+        menu_id=_menu_id;
+        nome_prodotto=_nome_prodotto;
+        descr=_descr;
+        prezzo=_prezzo;
+    }
 }

@@ -46,10 +46,6 @@ public class listaRistoranti extends Activity {
         ctx=this;
 
         myListaRistoranti=(ListView) findViewById(R.id.list_ristoranti);
-
-
-
-
         myRestaurants.add(new Ristorante("Rist1", "via doge", 0, 0, "1"));
 
         progress = ProgressDialog.show(ctx, "Looking for restaurats", "loading...", true, false);
@@ -79,11 +75,10 @@ public class listaRistoranti extends Activity {
         myListaRistoranti.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-
                 Intent intent = new Intent(ctx, listaMenu.class);
-
                 //intent.putExtra("idRistorante", myRestaurants.get(position).id);
-                Toast.makeText(ctx, myRestaurants.get(position).name, Toast.LENGTH_SHORT).show();
+                intent.putExtra("idRistorante", "0");
+                startActivity(intent);
             }
         });
 
