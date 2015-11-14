@@ -62,7 +62,7 @@ public class listaRistoranti extends Activity {
             public void onRequestCompleted(String result) {
                 progress.dismiss();
 
-                myRestaurants.add(new Ristorante("Rist2", "via doge", 0, 0, "2"));
+                myRestaurants.add(new Ristorante("Rist2", "via doge2", 0, 0, "2"));
 
                 listaRistorantiAdapter adapter = new listaRistorantiAdapter(ctx, myRestaurants);
                 myListaRistoranti.setAdapter(adapter);
