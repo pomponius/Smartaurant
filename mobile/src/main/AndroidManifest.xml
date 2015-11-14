@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.gruppo6.smartaurant" >
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -18,8 +23,17 @@
         </activity>
         <activity
             android:name=".listaMenu"
-            android:label="@string/title_activity_lista_menu" >
+            android:label="@string/app_name" >
         </activity>
+
+        <service
+            android:name=".Service.DataListenerService"
+            android:enabled="true"
+            android:exported="true" >
+                <intent-filter>
+                    <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
+                </intent-filter>
+        </service>
     </application>
 
 </manifest>
