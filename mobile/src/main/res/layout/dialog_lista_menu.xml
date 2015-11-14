@@ -7,48 +7,32 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin">
 
-    <ScrollView
-        android:layout_width="fill_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/scrollView"
-        android:layout_weight="0.5">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="prodotto_descrizione"
-            android:id="@+id/prodotto_descrizione"
-            android:layout_marginBottom="10dp" />
-    </ScrollView>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="prodotto_descrizione"
+        android:id="@+id/prodotto_descrizione"
+        android:layout_marginBottom="10dp" />
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="0.5">
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Quantità:"
+        android:id="@+id/title_quant" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Quantità:"
-            android:id="@+id/title_quant" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="1"
+        android:id="@+id/prodotto_quant"
+        android:layout_gravity="center_horizontal"
+        android:numeric="integer" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="1"
-            android:id="@+id/prodotto_quant"
-            android:layout_gravity="center_horizontal"
-            android:numeric="integer" />
-
-        <SeekBar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/seek_quant"
-            android:max="20" />
-    </LinearLayout>
-
+    <SeekBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/seek_quant"
+        android:max="20" />
 </LinearLayout>

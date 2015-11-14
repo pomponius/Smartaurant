@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.gruppo6.smartaurant.Adapter.InternetAdapter;
 import com.gruppo6.smartaurant.Adapter.listaMenuAdapter;
@@ -21,10 +23,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class listaMenu extends Activity {
-
+    final String LOG = "LISTAMENU_LOG";
     String URL = "http://smartaurant.alangiu.com/api-php";
 
     ListView listProdotti;
+    List<Prodotto> prodotti = new ArrayList<Prodotto>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,18 +43,15 @@ public class listaMenu extends Activity {
         InternetAdapter downloadRestaurants = new InternetAdapter(this, "GET", URL, params, new InternetAdapter.onRequestCompleted() {
             @Override
             public void onRequestCompleted(String result) {
-
+                Log.d(LOG, "Data item receive: " + result);
             }
         });
         downloadRestaurants.sendRequest();
 
-        List<Prodotto> prodotti = new ArrayList<Prodotto>();
-
         ///////////
-        Prodotto test = new Prodotto("0", "0", "0", "Pizza Margherita", "Nata a Napoli nel 1889, dall’estro del pizzaiolo napoletano Raffaele Esposito, la pizza margherita fu creata in occasione della visita della Regina Margherita, allora sovrana d’Italia insieme al Re Umberto I, alla meravigliosa città di Napoli. Esposito creò per quell’evento tre pizze molto diverse tra loro, ma la Regina apprezzò particolarmente quella con la mozzarella e il pomodoro, che da quel momento in poi, in suo onore, venne chiamata Margherita. Tra le pizze, la margherita è quella più semplice e più amata, specialmente dai bambini; preparata con pomodoro passato , mozzarella di bufala, olio e foglie di basilico, accontenta anche i palati più difficili, a patto che gli ingredienti siano di ottima qualità. E con lo stesso impasto potete realizzare le famose pizzelle fritte, un classico cibo da strada napoletano.", 3.5);
+        Prodotto test = new Prodotto("0", "0", "0", "Pizza Margherita", "Nata a Napoli nel 1889, dall’estro del pizzaiolo napoletano Raffaele Esposito, la pizza margherita fu creata in occasione della visita della Regina Margherita, allora sovrana d’Italia insieme al Re Umberto I, alla meravigliosa città di Napoli.", 3.5);
 
         prodotti.add(test);
-
         ////
 
 

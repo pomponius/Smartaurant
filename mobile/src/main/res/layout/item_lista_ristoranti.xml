@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
-    android:padding="6dip" >
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
 
     <TextView
         android:id="@+id/rist_name"
@@ -11,9 +12,9 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_alignWithParentIfMissing="true"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:gravity="center_vertical"
-        android:text="Restaurant name"
-        android:textSize="18sp" />
+        android:text="Restaurant name" />
 
     <TextView
         android:id="@+id/rist_address"
