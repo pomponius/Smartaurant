@@ -6,16 +6,18 @@
     android:paddingBottom="10dp">
 
     <TextView
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="prodotto_nome"
-        android:id="@+id/prodotto_nome" />
+        android:id="@+id/prodotto_nome"
+        android:layout_gravity="center_horizontal" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="prodotto_prezzo"
-        android:id="@+id/prodotto_prezzo" />
+        android:id="@+id/prodotto_prezzo"
+        android:layout_gravity="center_horizontal" />
 </LinearLayout>

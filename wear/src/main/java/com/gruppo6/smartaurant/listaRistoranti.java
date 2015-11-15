@@ -82,16 +82,6 @@ public class listaRistoranti extends Activity implements MessageApi.MessageListe
         myListaRistoranti=(ListView) findViewById(R.id.list_ristoranti);
 
         progress = ProgressDialog.show(ctx, "Cerco ristoranti nei paraggi...", "Attendere...", true, false);
-
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("s", "restaurant"));
-        params.add(new BasicNameValuePair("a", "list"));
-
-        /*try {
-            sendPackage(Common.params2string(params));
-        }catch (UnsupportedEncodingException e){
-            //
-        }*/
     }
 
     @Override
@@ -123,7 +113,9 @@ public class listaRistoranti extends Activity implements MessageApi.MessageListe
                 myListaRistoranti.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-                        //
+                        Intent intent = new Intent(ctx, listaMenu.class);
+                        intent.putExtra("idRistorante", myRestaurants.get(position).id);
+                        startActivity(intent);
                     }
                 });
                 progress.dismiss();
@@ -192,7 +184,8 @@ public class listaRistoranti extends Activity implements MessageApi.MessageListe
 
     private GoogleApiClient getGoogleApiClient(Context context) {
         return new GoogleApiClient.Builder(context)
-                .addApi(Wearable.API).addConnectionCallbacks(this)
+                .addApi(Wearable.API)
+                .addConnectionCallbacks(this)
                 .build();
 
     }

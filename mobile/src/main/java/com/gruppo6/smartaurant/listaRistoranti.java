@@ -57,12 +57,9 @@ public class listaRistoranti extends Activity {
         InternetAdapter downloadRestaurants = new InternetAdapter(ctx, "GET", URL, params, new InternetAdapter.onRequestCompleted() {
             @Override
             public void onRequestCompleted(String result) {
-<<<<<<< HEAD
                 Log.d(LOG, "Data item receive: " + result);
-=======
                 //Log.d(LOG, "Data item receive: " + result);
                 //Toast.makeText(ctx, result, Toast.LENGTH_SHORT).show();
->>>>>>> refs/heads/pr/2
 
                 myRestaurants.clear();
 
