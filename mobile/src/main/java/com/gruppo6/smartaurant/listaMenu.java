@@ -51,7 +51,7 @@ public class listaMenu extends Activity {
     ListView listProdotti;
     List<Prodotto> prodotti = new ArrayList<Prodotto>();
     Context ctx;
-    String id_ristorante;
+    String id_ristorante="0";
     String table;
     ListAdapter listAdapter;
     int session=-1;
@@ -72,7 +72,15 @@ public class listaMenu extends Activity {
 
 
 
-        if(/*1==0*/getIntent().getData()!=null){//check if intent is not null
+
+        if(intent.hasExtra("idRistorante")) {
+            id_ristorante = intent.getStringExtra("idRistorante");
+            SharedPreferences.Editor editor = getSharedPreferences("MY_PREF", MODE_PRIVATE).edit();
+            editor.putString("restId", id_ristorante);
+            editor.commit();
+            downloadMenu();
+        }
+        else if(getIntent().getData()!=null){//check if intent is not null
             Uri data = getIntent().getData();//set a variable for the Intent
             //String scheme = data.getScheme();//get the scheme (http,https)
             String fullPath = data.getEncodedSchemeSpecificPart();//get the full path -scheme - fragments
@@ -118,12 +126,6 @@ public class listaMenu extends Activity {
             loginTable.sendRequest();
 
 
-        } else {
-            id_ristorante = intent.getStringExtra("idRistorante");
-            SharedPreferences.Editor editor = getSharedPreferences("MY_PREF", MODE_PRIVATE).edit();
-            editor.putString("restId", id_ristorante);
-            editor.commit();
-            downloadMenu();
         }
 
 
@@ -196,6 +198,7 @@ public class listaMenu extends Activity {
         downloadRestaurants.sendRequest();
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

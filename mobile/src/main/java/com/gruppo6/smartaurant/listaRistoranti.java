@@ -64,7 +64,7 @@ public class listaRistoranti extends Activity {
             params.add(new BasicNameValuePair("s", "session"));
             params.add(new BasicNameValuePair("a", "closed"));
             params.add(new BasicNameValuePair("restId", ""+id_ristorante));
-            params.add(new BasicNameValuePair("sessId", ""+session));
+            params.add(new BasicNameValuePair("sessId", "" + session));
             InternetAdapter connected = new InternetAdapter(ctx, "GET", URL, params, new InternetAdapter.onRequestCompleted() {
                 @Override
                 public void onRequestCompleted(String result) {
@@ -82,12 +82,16 @@ public class listaRistoranti extends Activity {
                         Toast.makeText(ctx, "Errore! non riesco a capire se sei in un ristorante", Toast.LENGTH_LONG).show();
                     }
                     if(closed==0){
+                        Intent intent = new Intent(ctx, listaMenu.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra("idRistorante", id_ristorante);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        session=-1;
                         SharedPreferences.Editor editor = getSharedPreferences("MY_PREF", MODE_PRIVATE).edit();
                         editor.putInt("session", -1);
                         editor.commit();
-                        Intent intent = new Intent(ctx, listaMenu.class);
-                        intent.putExtra("idRistorante", id_ristorante);
-                        startActivity(intent);
                     }
 
 
@@ -96,7 +100,7 @@ public class listaRistoranti extends Activity {
             });
             connected.sendRequest();
         }
-        
+
 
 
 
