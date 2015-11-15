@@ -37,7 +37,7 @@ public class listaMenuAdapter extends ArrayAdapter<Prodotto> {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-
+/*
         if(convertView==null){
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             convertView = inflater.inflate(layoutResourceId, parent, false);
@@ -108,7 +108,7 @@ public class listaMenuAdapter extends ArrayAdapter<Prodotto> {
                 dialog.show();
             }
         });
-
+*/
         return convertView;
 
     }

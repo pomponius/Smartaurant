@@ -47,7 +47,7 @@ public class listaRistoranti extends Activity {
 
         ctx=this;
 
-        myListaRistoranti=(ListView) findViewById(R.id.list_ristoranti);
+        //myListaRistoranti=(ListView) findViewById(R.id.list_ristoranti);
         myRestaurants.add(new Ristorante("Rist1", "via doge", 0, 0, "1"));
 
         progress = ProgressDialog.show(ctx, "Looking for restaurats", "loading...", true, false);
@@ -75,16 +75,16 @@ public class listaRistoranti extends Activity {
                     //
                 }
 
-                listaRistorantiAdapter adapter = new listaRistorantiAdapter(ctx, myRestaurants);
-                myListaRistoranti.setAdapter(adapter);
-                myListaRistoranti.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-                        Intent intent = new Intent(ctx, listaMenu.class);
-                        intent.putExtra("idRistorante", myRestaurants.get(position).id);
-                        startActivity(intent);
-                    }
-                });
+                //listaRistorantiAdapter adapter = new listaRistorantiAdapter(ctx, myRestaurants);
+                //myListaRistoranti.setAdapter(adapter);
+                //myListaRistoranti.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    //@Override
+                    //public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+                        //Intent intent = new Intent(ctx, listaMenu.class);
+                        //intent.putExtra("idRistorante", myRestaurants.get(position).id);
+                        //startActivity(intent);
+                   //}
+                //});
                 progress.dismiss();
             }
         });

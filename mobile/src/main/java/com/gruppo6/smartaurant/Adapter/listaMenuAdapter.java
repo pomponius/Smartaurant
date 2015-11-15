@@ -16,6 +16,8 @@ import android.widget.ArrayAdapter;
 import android.widget.NumberPicker;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.gruppo6.smartaurant.Data.Prodotto;
 import com.gruppo6.smartaurant.R;
 
@@ -34,17 +36,52 @@ public class listaMenuAdapter extends ArrayAdapter<Prodotto> {
         context = _context;
         data.clear();
         data.addAll(_data);
+
+        for(int i=0; i<data.size();i++){
+            if(i==0) {
+                data.add(i, new Prodotto("0", "0", "-1", "Primo", "Pizza Margherita", "Nata", 1, "0"));
+                i++;
+            }
+            else {
+                if(Integer.parseInt(data.get(i).menu_id)!=Integer.parseInt(data.get(i-1).menu_id)) {
+                    data.add(i, new Prodotto("0", "0", "-1", "Primo", "Pizza Margherita", "Nata", 1, "0"));
+                    i++;
+                }
+            }
+
+        }
+
+    }
+
+    @Override
+    public int getCount(){
+        return data.size();
     }
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
-        if(convertView==null){
+       /* if(convertView==null){
+            LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+            convertView = inflater.inflate(layoutResourceId, parent, false);
+        }*/
+
+        final Prodotto current = data.get(position);
+        if(Integer.parseInt(current.menu_id)==-1){
+
+            LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+            convertView = inflater.inflate(R.layout.item_lista_menu_header, parent, false);
+            TextView view_header = (TextView) convertView.findViewById(R.id.header);
+            view_header.setText(data.get(position+1).nome_menu);
+
+            return convertView;
+
+        } else{
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             convertView = inflater.inflate(layoutResourceId, parent, false);
         }
 
-        final Prodotto current = data.get(position);
+
 
         TextView view_nome = (TextView) convertView.findViewById(R.id.prodotto_nome);
         TextView view_prezzo = (TextView) convertView.findViewById(R.id.prodotto_prezzo);

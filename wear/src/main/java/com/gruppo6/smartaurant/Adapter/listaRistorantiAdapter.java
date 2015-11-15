@@ -20,16 +20,20 @@ public class listaRistorantiAdapter extends ArrayAdapter<Ristorante> {
     private Context context;
     List<Ristorante> restaurants;
 
+    public listaRistorantiAdapter(Context context, int resource) {
+        super(context, resource);
+    }
 
-    public listaRistorantiAdapter(Context context, List<Ristorante> r) {
-        super(context, R.layout.item_lista_ristoranti, r);
+
+    /*public listaRistorantiAdapter(Context context, List<Ristorante> r) {
+        //super(context, R.layout.item_lista_ristoranti, r);
         this.context = context;
         this.restaurants = r;
-    }
+    }*/
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        /*LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.item_lista_ristoranti, parent, false);
         TextView name = (TextView) rowView.findViewById(R.id.rist_name);
         TextView address = (TextView) rowView.findViewById(R.id.rist_address);
@@ -37,7 +41,7 @@ public class listaRistorantiAdapter extends ArrayAdapter<Ristorante> {
         name.setText(restaurants.get(position).name);
         address.setText(restaurants.get(position).address);
         distance.setText("Distance");
-
-        return rowView;
+*/
+        return convertView;
     }
 }

@@ -50,7 +50,7 @@ public class listaRistoranti extends Activity {
         myListaRistoranti=(ListView) findViewById(R.id.list_ristoranti);
         myRestaurants.add(new Ristorante("Rist1", "via doge", 0, 0, "1"));
 
-        progress = ProgressDialog.show(ctx, "Looking for restaurats", "loading...", true, false);
+        progress = ProgressDialog.show(ctx, "Cerco ristoranti nei paraggi", "caricamento...", true, false);
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("s", "restaurant"));
@@ -58,8 +58,8 @@ public class listaRistoranti extends Activity {
         InternetAdapter downloadRestaurants = new InternetAdapter(ctx, "GET", URL, params, new InternetAdapter.onRequestCompleted() {
             @Override
             public void onRequestCompleted(String result) {
-                Log.d(LOG, "Data item receive: " + result);
-                Toast.makeText(ctx, result, Toast.LENGTH_SHORT).show();
+                //Log.d(LOG, "Data item receive: " + result);
+                //Toast.makeText(ctx, result, Toast.LENGTH_SHORT).show();
 
                 myRestaurants.clear();
 
