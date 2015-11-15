@@ -1,10 +1,15 @@
 package com.gruppo6.smartaurant.Service;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.data.FreezableUtils;
 import com.google.android.gms.wearable.DataApi;
@@ -13,11 +18,27 @@ import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataItem;
 import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
+import com.google.android.gms.wearable.MessageApi;
+import com.google.android.gms.wearable.MessageEvent;
+import com.google.android.gms.wearable.Node;
+import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
+import com.gruppo6.smartaurant.Adapter.InternetAdapter;
+import com.gruppo6.smartaurant.Adapter.listaRistorantiAdapter;
+import com.gruppo6.smartaurant.Data.Ristorante;
+import com.gruppo6.smartaurant.listaMenu;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -25,60 +46,75 @@ import java.util.concurrent.TimeUnit;
 public class DataListenerService extends WearableListenerService {
 
     public static final String LOG = "DATALISTENER_LOG";
-    public static final String TIME_KEY = "TIME";
-    public static final String MESSAGE_KEY = "MESSAGE";
+    public int CONNECTION_TIME_OUT_MS = 10000;
+
+    String URL = "http://smartaurant.alangiu.com/api.php";
 
     GoogleApiClient mGoogleApiClient;
+    String nodeId;
 
     @Override
-    public void onDataChanged(DataEventBuffer dataEvents) {
-        if (Log.isLoggable(LOG, Log.DEBUG)) {
-            Log.d(LOG, "onDataChanged: " + dataEvents);
-        }
-        final List events = FreezableUtils
-                .freezeIterable(dataEvents);
+    public void onMessageReceived(MessageEvent messageEvent) {
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Wearable.API)
-                .build();
+        mGoogleApiClient = getGoogleApiClient(this);
+        mGoogleApiClient.connect();
 
-        ConnectionResult connectionResult =
-                mGoogleApiClient.blockingConnect(30, TimeUnit.SECONDS);
-
-        if (!connectionResult.isSuccess()) {
-            Log.e(LOG, "Failed to connect to GoogleApiClient.");
-            return;
-        }
-
-        for (DataEvent event : dataEvents) {
-            if (event.getType() == DataEvent.TYPE_CHANGED) {
-                Log.d(LOG, "DataItem changed");
-                DataItem item = event.getDataItem();
-                if (item.getUri().getPath().compareTo("/request") == 0) {
-                    final DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-                    String request = dataMap.getString("REQUEST");
-                    sendResponse("RISULTATO");
-                }
-            } else if (event.getType() == DataEvent.TYPE_DELETED) {
-                // DataItem deleted
-            }
-        }
-    }
-
-    void sendResponse(String response){
-        PutDataMapRequest putDataMapReq = PutDataMapRequest.create("/response");
-        putDataMapReq.getDataMap().putLong(TIME_KEY, new Date().getTime());
-        putDataMapReq.getDataMap().putString(MESSAGE_KEY, response);
-        PutDataRequest putDataReq = putDataMapReq.asPutDataRequest();
-        PendingResult<DataApi.DataItemResult> pendingResult = Wearable.DataApi.putDataItem(mGoogleApiClient, putDataReq);
-
-        pendingResult.setResultCallback(new ResultCallback<DataApi.DataItemResult>() {
+        String request = messageEvent.getPath();
+        nodeId = messageEvent.getSourceNodeId();
+        Log.d(LOG, "Request received: " + request);
+        InternetAdapter downloadRestaurants = new InternetAdapter(this, "GET", URL, request, new InternetAdapter.onRequestCompleted() {
             @Override
-            public void onResult(final DataApi.DataItemResult result) {
-                if(result.getStatus().isSuccess()) {
-                    Log.d(LOG, "Data item set: " + result.getDataItem().getUri());
-                }
+            public void onRequestCompleted(String result) {
+                sendPackage(result);
             }
         });
+        downloadRestaurants.sendRequest();
+    }
+
+    private void retrieveDeviceNode() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                mGoogleApiClient.blockingConnect(CONNECTION_TIME_OUT_MS, TimeUnit.MILLISECONDS);
+                NodeApi.GetConnectedNodesResult result =
+                        Wearable.NodeApi.getConnectedNodes(mGoogleApiClient).await();
+                List<Node> nodes = result.getNodes();
+                if (nodes.size() > 0) {
+                    nodeId = nodes.get(0).getId();
+                    Log.d(LOG,"NodeId: " + nodeId);
+                }
+                //mGoogleApiClient.disconnect();
+            }
+        }).start();
+    }
+
+    private GoogleApiClient getGoogleApiClient(Context context) {
+        return new GoogleApiClient.Builder(context)
+                .addApi(Wearable.API)
+                .build();
+    }
+
+    private void sendPackage(final String str) {
+        if (nodeId != null) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    mGoogleApiClient.blockingConnect(CONNECTION_TIME_OUT_MS, TimeUnit.MILLISECONDS);
+                    PendingResult<MessageApi.SendMessageResult> pendingResult = Wearable.MessageApi.sendMessage(mGoogleApiClient, nodeId, str, null);
+                    pendingResult.setResultCallback(new ResultCallback<MessageApi.SendMessageResult> () {
+                        @Override
+                        public void onResult(final MessageApi.SendMessageResult result) {
+                            if(result.getStatus().isSuccess()) {
+                                Log.d(LOG, "Response sent to " + nodeId);
+                            }else{
+                                Log.d(LOG, "Can't send package!");
+                            }
+                        }
+                    });
+                }
+            }).start();
+        }else{
+            Log.d(LOG, "NODEID IS NULL!!!!!!!!!!!!");
+        }
     }
 }

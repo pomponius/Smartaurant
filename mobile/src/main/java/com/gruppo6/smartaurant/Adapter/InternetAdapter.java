@@ -31,6 +31,7 @@ public class InternetAdapter {
     private Context ctx;
     private String url="";
     private String method="";
+    private String request="";
     private List<NameValuePair> params;
     private onRequestCompleted func;
 
@@ -43,6 +44,14 @@ public class InternetAdapter {
         url=u;
         method=m;
         params=p;
+        func=f;
+    }
+
+    public InternetAdapter(Context c,String m, String u, String r, onRequestCompleted f){
+        ctx=c;
+        url=u;
+        method=m;
+        request=r;
         func=f;
     }
 
@@ -90,8 +99,12 @@ public class InternetAdapter {
         int len = 5000;
 
         try {
-            if(method.equals("GET")){
-                myurl+="?"+ URLEncodedUtils.format(params, "utf-8");
+            if(method.equals("GET")) {
+                if (request.isEmpty()){
+                    myurl += "?" + URLEncodedUtils.format(params, "utf-8");
+                }else{
+                    myurl += "?" + request;
+                }
             }
             URL url = new URL(myurl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -108,8 +121,14 @@ public class InternetAdapter {
             if(!method.equals("GET")) {
                 OutputStream os = conn.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(os, "UTF-8"));
-                writer.write(getQuery(params));
+                new OutputStreamWriter(os, "UTF-8"));
+
+                if (request.isEmpty()){
+                    writer.write(getQuery(params));
+                }else {
+                    writer.write(request);
+                }
+
                 writer.flush();
                 writer.close();
                 os.close();

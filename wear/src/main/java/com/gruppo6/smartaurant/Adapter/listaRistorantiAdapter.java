@@ -32,12 +32,7 @@ public class listaRistorantiAdapter extends ArrayAdapter<Ristorante> {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.item_lista_ristoranti, parent, false);
         TextView name = (TextView) rowView.findViewById(R.id.rist_name);
-        TextView address = (TextView) rowView.findViewById(R.id.rist_address);
-        TextView distance = (TextView) rowView.findViewById(R.id.rist_distance);
         name.setText(restaurants.get(position).name);
-        address.setText(restaurants.get(position).address);
-        distance.setText("Distance");
-
         return rowView;
     }
 }

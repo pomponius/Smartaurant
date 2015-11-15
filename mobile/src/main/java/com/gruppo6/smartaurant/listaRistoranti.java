@@ -48,7 +48,6 @@ public class listaRistoranti extends Activity {
         ctx=this;
 
         myListaRistoranti=(ListView) findViewById(R.id.list_ristoranti);
-        myRestaurants.add(new Ristorante("Rist1", "via doge", 0, 0, "1"));
 
         progress = ProgressDialog.show(ctx, "Looking for restaurats", "loading...", true, false);
 
@@ -59,7 +58,6 @@ public class listaRistoranti extends Activity {
             @Override
             public void onRequestCompleted(String result) {
                 Log.d(LOG, "Data item receive: " + result);
-                Toast.makeText(ctx, result, Toast.LENGTH_SHORT).show();
 
                 myRestaurants.clear();
 

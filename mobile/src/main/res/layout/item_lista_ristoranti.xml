@@ -19,24 +19,24 @@
     <TextView
         android:id="@+id/rist_address"
         android:layout_width="wrap_content"
-        android:layout_height="26dip"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
+        android:layout_height="wrap_content"
         android:ellipsize="marquee"
         android:singleLine="true"
         android:text="Address"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:id="@+id/rist_distance"
         android:layout_width="wrap_content"
-        android:layout_height="26dip"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
+        android:layout_height="wrap_content"
         android:ellipsize="marquee"
         android:singleLine="true"
         android:text="Distance"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
 
 
 </RelativeLayout>
