@@ -24,6 +24,12 @@
         <activity
             android:name=".listaMenu"
             android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"></action>
+                <category android:name="android.intent.category.DEFAULT"></category>
+                <category android:name="android.intent.category.BROWSABLE"></category>
+                <data android:host="smartaurant" android:scheme="bxhh"></data>
+            </intent-filter>
         </activity>
 
         <service

@@ -9,6 +9,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,18 +22,24 @@ import android.widget.Toast;
 import com.gruppo6.smartaurant.Data.Prodotto;
 import com.gruppo6.smartaurant.R;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class listaMenuAdapter extends ArrayAdapter<Prodotto> {
 
+    String URL = "http://smartaurant.alangiu.com/api.php";
     Context context;
     int layoutResourceId;
     List<Prodotto> data = new ArrayList<Prodotto>();
+    int session;
 
-    public listaMenuAdapter(Context _context, int _layoutResourceId, List<Prodotto> _data) {
+    public listaMenuAdapter(Context _context, int _layoutResourceId, List<Prodotto> _data, int _session) {
         super(_context, _layoutResourceId, _data);
         layoutResourceId = _layoutResourceId;
+        session=_session;
         context = _context;
         data.clear();
         data.addAll(_data);
@@ -97,16 +104,7 @@ public class listaMenuAdapter extends ArrayAdapter<Prodotto> {
                 final View dialog_view = LayoutInflater.from(context).inflate(R.layout.dialog_lista_menu, null);
                 builder.setTitle(current.nome_prodotto);
                 builder.setView(dialog_view);
-                builder.setPositiveButton("Compra", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // User clicked OK button
-                    }
-                });
-                builder.setNegativeButton("Indietro", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // User cancelled the dialog
-                    }
-                });
+
 
                 final TextView text_descrizione = (TextView) dialog_view.findViewById(R.id.prodotto_descrizione);
                 text_descrizione.setText(current.descr);
@@ -134,13 +132,46 @@ public class listaMenuAdapter extends ArrayAdapter<Prodotto> {
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                         // TODO Auto-generated method stub
-                        text_quant.setText(String.valueOf(progress+1));
+                        text_quant.setText(String.valueOf(progress + 1));
 
                     }
                 });
 
                 seek_quant.setMax(20);
                 seek_quant.setProgress(0);
+
+                if (session != -1) {
+                    builder.setPositiveButton("ORDINA", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                            int a = seek_quant.getProgress()+1;
+                            List<NameValuePair> params = new ArrayList<NameValuePair>();
+                            params.add(new BasicNameValuePair("s", "order"));
+                            params.add(new BasicNameValuePair("a", "new"));
+                            params.add(new BasicNameValuePair("restId", current.rist_id));
+                            params.add(new BasicNameValuePair("sessId", ""+session));
+                            params.add(new BasicNameValuePair("dishId", current.id));
+                            params.add(new BasicNameValuePair("qty", ""+a));
+                            InternetAdapter buy = new InternetAdapter(context, "GET", URL, params, new InternetAdapter.onRequestCompleted() {
+                                @Override
+                                public void onRequestCompleted(String result) {
+                                    Toast.makeText(context, "Ordine effettuato!", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                            buy.sendRequest();
+
+                        }
+                    });
+                }
+                builder.setNegativeButton("Indietro", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+
+
+
+
 
                 AlertDialog dialog = builder.create();
                 dialog.show();

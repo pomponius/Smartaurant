@@ -4,10 +4,12 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -67,7 +69,7 @@ public class InternetAdapter {
         if (networkInfo != null && networkInfo.isConnected()) {
             new DownloadWebpageTask().execute(url);
         } else {
-            //Toast.makeText(ctx, "Network connection is off.", Toast.LENGTH_LONG).show();
+            Toast.makeText(ctx, "Network connection is off.", Toast.LENGTH_LONG).show();
             func.onRequestCompleted("Network connection is off.");
         }
     }
@@ -80,6 +82,7 @@ public class InternetAdapter {
             try {
                 return downloadUrl(urls[0]);
             } catch (IOException e) {
+                Toast.makeText(ctx, "I can't connect to the server.", Toast.LENGTH_LONG).show();
                 return "I can't connect to the server.";
             }
         }
@@ -96,7 +99,7 @@ public class InternetAdapter {
         InputStream is = null;
         // Only display the first 500 characters of the retrieved
         // web page content.
-        int len = 5000;
+        int len = 30000;
 
         try {
             if(method.equals("GET")) {
@@ -138,13 +141,21 @@ public class InternetAdapter {
             conn.connect();
             int response = conn.getResponseCode();
             if(response != 200) {
-                //Toast.makeText(ctx, "Error: "+response, Toast.LENGTH_LONG).show();
+                Toast.makeText(ctx, "Error: "+response, Toast.LENGTH_LONG).show();
                 return ""+response;
             }
             is = conn.getInputStream();
 
+
+            BufferedReader r = new BufferedReader(new InputStreamReader(is));
+            StringBuilder total = new StringBuilder();
+            String line;
+            while ((line = r.readLine()) != null) {
+                total.append(line);
+            }
+            String contentAsString=total.toString();
             // Convert the InputStream into a string
-            String contentAsString = readIt(is, len);
+            //String contentAsString = readIt(is, len);
             return contentAsString;
 
             // Makes sure that the InputStream is closed after the app is
